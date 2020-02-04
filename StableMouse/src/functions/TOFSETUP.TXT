@@ -1,0 +1,161 @@
+#include <Wire.h>
+#include <MPU6050_tockn.h>
+#include <VL53L0X.h>
+
+#define XSHUT_pin1 PA0           //Right Sensor
+#define XSHUT_pin2 PA1        //Left Sensor
+#define XSHUT_pin3 PA2           //Front Sensor    
+#define XSHUT_pin4 PA3           //Right Sensor
+#define XSHUT_pin5 PA4          //Left Sensor
+#define XSHUT_pin6 PA5        //Front Sensor    
+
+
+#define Sensor1_newAddress 42
+#define Sensor2_newAddress 43
+#define Sensor3_newAddress 44
+#define Sensor4_newAddress 45
+#define Sensor5_newAddress 46
+#define Sensor6_newAddress 47
+
+#define SignalRateLimit 0.8          //Higher the limit , higher the accuracy
+#define MeasurementBudget 60000      //Higher the time , higher the accuracy
+#define Timeout 200
+#define ContInterval 40 //inter-measurement period in milliseconds determining how often the sensor takes a measurement.
+
+
+VL53L0X Sensor1;      //Right Sensor
+VL53L0X Sensor2;      //Left Sensor
+VL53L0X Sensor3;      //Front RIGHT Sensor
+VL53L0X Sensor4;      //Front LEFT Sensor
+VL53L0X Sensor5;      //TILT RIGHT Sensor
+VL53L0X Sensor6;      //TILT LEFT Sensor
+
+
+
+
+
+
+
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Wire.begin();
+  pinMode(XSHUT_pin1, OUTPUT);
+  pinMode(XSHUT_pin2, OUTPUT);
+  pinMode(XSHUT_pin3, OUTPUT);
+  pinMode(XSHUT_pin4, OUTPUT);
+  pinMode(XSHUT_pin5, OUTPUT);
+  pinMode(XSHUT_pin6, OUTPUT);
+
+  pinMode(XSHUT_pin6,INPUT);
+  delay(10);
+  Sensor6.setAddress(Sensor6_newAddress);
+  
+  pinMode(XSHUT_pin5,INPUT);
+  delay(10);
+  Sensor5.setAddress(Sensor5_newAddress);
+  
+  pinMode(XSHUT_pin4, INPUT);
+  delay(10);
+  Sensor4.setAddress(Sensor4_newAddress);
+  
+  pinMode(XSHUT_pin3,INPUT);
+  delay(10);
+  Sensor3.setAddress(Sensor3_newAddress);
+  
+  pinMode(XSHUT_pin2,INPUT);
+  delay(10);
+  Sensor2.setAddress(Sensor2_newAddress);
+  
+  pinMode(XSHUT_pin1, INPUT);
+  delay(10);
+  Sensor1.setAddress(Sensor1_newAddress);
+ 
+  if(Sensor1.init()){
+    Serial.println("Sensor 1 : Configured");
+  }
+  else
+  {
+    Serial.println("Sensor 1 : Configuration Failed");
+  }
+  if(Sensor2.init()){
+    Serial.println("Sensor 2 : Configured");
+  }
+  else
+  {
+    Serial.println("Sensor 2 : Configuration Failed");
+  }
+  if(Sensor3.init()){
+    Serial.println("Sensor 3 : Configured");
+  }
+  else
+  {
+    Serial.println("Sensor 3 : Configuration Failed");
+  }
+
+  if(Sensor4.init()){
+    Serial.println("Sensor 4 : Configured");
+  }
+  else
+  {
+    Serial.println("Sensor 4 : Configuration Failed");
+  }
+
+  if(Sensor5.init()){
+    Serial.println("Sensor 5 : Configured");
+  }
+  else
+  {
+    Serial.println("Sensor 5 : Configuration Failed");
+  }
+
+  if(Sensor6.init()){
+    Serial.println("Sensor 6 : Configured");
+  }
+  else
+  {
+    Serial.println("Sensor 6 : Configuration Failed");
+  }
+  
+  // Sensor1.setSignalRateLimit(0.8);
+  // Sensor2.setSignalRateLimit(0.9);
+  // Sensor3.setSignalRateLimit(0.9);
+
+  //  Sensor1.setMeasurementTimingBudget(MeasurementBudget);
+  //  Sensor2.setMeasurementTimingBudget(MeasurementBudget);
+  //  Sensor3.setMeasurementTimingBudget(MeasurementBudget);
+
+  //  Sensor1.setTimeout(Timeout);
+  //  Sensor2.setTimeout(Timeout);
+  //  Sensor3.setTimeout(Timeout);
+
+ Sensor1.startContinuous();
+ Sensor2.startContinuous();
+ Sensor3.startContinuous();
+ Sensor4.startContinuous();
+ Sensor5.startContinuous();
+ Sensor6.startContinuous();
+
+ Serial.println("TOF setup done");
+  
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  Serial.print(Sensor1.readRangeContinuousMillimeters());
+  Serial.print(",  ");
+  Serial.print(Sensor2.readRangeContinuousMillimeters());
+  Serial.print(",  ");
+  Serial.print(Sensor3.readRangeContinuousMillimeters());
+  Serial.print(",  ");
+  Serial.print(Sensor4.readRangeContinuousMillimeters());
+  Serial.print(",  ");
+  Serial.print(Sensor5.readRangeContinuousMillimeters());
+  Serial.print(",  ");
+  Serial.print(Sensor6.readRangeContinuousMillimeters());
+  Serial.println(",  ");
+  delay(50);
+
+}
